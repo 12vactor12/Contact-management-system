@@ -1,11 +1,10 @@
-```markdown
+markdown
 # Frontend Project Overview
 
 ## Project Overview
 This project is a front-end application built using Bootstrap and jQuery. The project structure is clear, separating resources, styles, scripts, and templates for easier development and maintenance.
 
 ## Directory Structure
-```
 ```
 └─src
     ├─resource
