@@ -6,6 +6,7 @@ This project is a front-end application built using Bootstrap and jQuery. The pr
 
 ## Directory Structure
 ```
+```
 └─src
     ├─resource
     │  └─img                     # Directory for images used in the application
@@ -18,6 +19,7 @@ This project is a front-end application built using Bootstrap and jQuery. The pr
     │          └─js              # Bootstrap JavaScript files
     └─templates                 # Directory for HTML templates/pages
 requirement.txt                 # File listing project dependencies
+```
 ```
 
 ## Installation
