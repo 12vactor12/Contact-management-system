@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <head>
+        <script src="../static/plugins/jQuery.js"></script>
+        <link rel="stylesheet" href="../static/plugins/bootstrap-5.3.3-dist/css/bootstrap.css">
+        <script src="../static/plugins/bootstrap-5.3.3-dist/js/bootstrap.bundle.js"></script>
+    </head>
+
+    <style>
+
+        .bg-success {
+            --bs-bg-opacity: 1;
+            background-color: rgba(33, 37, 41, 1) !important;
+        }
+
+        .pagination {
+            --bs-pagination-bg: unset;
+            --bs-pagination-border-color: #495057;
+        }
+
+        .form_parent {
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            margin-top: 100px;
+            margin-bottom: 50px;
+        }
+
+        .button_margin {
+            margin: 0 5px;
+        }
+    </style>
+</head>
+
+<body class="bg-success">
+
+<!-- Edit Modal box-->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Contact</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <div class="mb-3">
+                        <label for="editName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="editName" name="name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editTelNumber" class="form-label">Tel Number</label>
+                        <input type="text" class="form-control" id="editTelNumber" name="telNumber">
+                    </div>
+                    <input type="hidden" id="editContactId">
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div>
+    <!-- navigation item-->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">通讯录</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a class="nav-link active" aria-current="page" href="/sign">Sign up</a>-->
+                    <!--                    </li>-->
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a class="nav-link active" aria-current="page" href="/sign">Sign in</a>-->
+                    <!--                    </li>-->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            user
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">username:{{username}}</a></li>
+                            <li><a class="dropdown-item" href="#">user id:{{user_id}}</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="/logout">log out</a></li>
+
+                        </ul>
+                    </li>
+                </ul>
+
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+</div>
+<div class="container">
+    <!--add user-->
+    <div class="form_parent">
+        <form class="row row-cols-lg-auto g-3 align-items-center" method="post" id="addUserForm">
+            <div class="col-12">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="inputContactName"
+                           placeholder="Contactname" name="name">
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="inputContactPhone"
+                           placeholder="Tel Number" name="telNumber">
+                </div>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary" id="inputButton">submit</button>
+            </div>
+        </form>
+    </div>
+    <!--contacter form-->
+    <div>
+        <table class="table table-dark table-hover" id="table">
+            <thead>
+            <tr>
+                <th scope="col" style="width: 100px;">contact id</th>
+                <th scope="col" style="width: 100px;">Name</th>
+                <th scope="col" style="width: 100px;">Tel Number</th>
+                <th scope="col" style="width: 100px;">action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in datalist %}
+            <!--使用后端传过来的datalist渲染页面-->
+            <tr>
+                <td style="width: 100px;">{{item.id}}</td>
+                <td style="width: 100px;">{{item.contact_name}}</td>
+                <td style="width: 100px;">{{item.contact_phone}}</td>
+                <td style="width: 100px;">
+                    <a class="btn btn-primary button_margin edit-button" data-id="{{item.id}}">编辑</a>
+                    <a class="btn btn-secondary button_margin">删除</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    、
+    <!--contacter form 分页-->
+    <div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+<script src="../static/plugins/jQuery.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //添加新联系人
+        $('#addUserForm').on('submit', function (e) {
+            e.preventDefault(); // 阻止表单默认提交行为
+
+            // 使用 .val() 方法获取值，并在局部作用域内声明变量
+            var ContactName = $('#inputContactName').val();
+            var ContactPhone = $('#inputContactPhone').val();
+
+            // 检查 name 和 telNumber 是否都已填写
+            if (ContactName && ContactPhone) {
+                console.log("添加栏填写完毕")
+                const params = new URLSearchParams();
+                params.append('ContactName', ContactName);
+                params.append('ContactPhone', ContactPhone);
+
+                // 发送 AJAX 请求
+                $.ajax({
+                    type: 'POST',
+                    url: `/myweb?${params}`,
+                    success: function (data) {
+                        //更新列表
+                        var tbody = $('#table').find('tbody');
+                        console.log("添加联系人模块正在重新渲染页面")
+                        tbody.empty(); // 清空现有列表
+                        // data.forEach(function (item) {
+                        //     // 使用模板字符串和 $() 函数来创建行和列
+                        //     var row = $('<tr>').append(
+                        //         $('<th>').attr('scope', 'row').text(item.id),
+                        //         $('<td>').text(item.contact_name),
+                        //         $('<td>').text(item.contact_phone),
+                        //         $('<td>').append(
+                        //             $('<a>', {
+                        //                 class: 'btn btn-primary button_margin edit-button',
+                        //                 text: '编辑',
+                        //                 'data-id': item.id
+                        //             }),
+                        //             $('<a>').addClass('btn btn-secondary button_margin').text('删除')
+                        //         )
+                        //     );
+                        //     // 将创建的行添加到 tbody 中
+                        //     tbody.append(row);
+                        //     // 清空表单
+                        //     $('#addUserForm')[0].reset();
+                        // })
+                        location.reload(); // 刷新页面以更新列表
+                    },
+                    function(error) {
+                        console.log('收到添加联系人请求的失败信息如下');
+                        console.error('Error adding user:', error);
+                    }
+                });
+            } else {
+                alert("请输入完整信息");
+            }
+        });
+
+
+        //编辑联系人
+        $(document).on('click', '.edit-button', function () {
+            console.log("编辑按钮被点击");
+            const id = $(this).data('id');
+            const ContactName = $(this).closest('tr').find('td').eq(0).text();
+            const ContactPhone = $(this).closest('tr').find('td').eq(1).text();
+
+            // 将值填入模态框
+            $('#editContactId').val(id);
+            $('#editName').val(ContactName);
+            $('#editTelNumber').val(ContactPhone);
+
+            // 显示模态框
+            $('#editModal').modal('show');
+        });
+
+        // 提交编辑表单
+        $('#editForm').on('submit', function (e) {
+            e.preventDefault();
+            const id = $('#editContactId').val();
+            const ContactName = $('#editName').val();
+            const ContactPhone = $('#editTelNumber').val();
+            const params = new URLSearchParams();
+            params.append('id', id);
+            params.append('ContactName', ContactName);
+            params.append('ContactPhone', ContactPhone);
+            $.ajax({
+                type: 'PUT',
+                url: `/myweb?${params}`,
+                success: function (data) {
+                    $('#editModal').modal('hide');
+                    console.log("修改完毕，刷新页面")
+                    location.reload(); // 刷新页面以更新列表
+                },
+                error: function (error) {
+                    console.log("修改联系人出错,错误如下:")
+                    console.error('Error updating contact:', error);
+                }
+            });
+        });
+
+
+        //删除联系人
+        $(document).on('click', '.btn-secondary', function () {
+            var closestRow = $(this).closest('tr');
+            var id = closestRow.find('td').eq(0).text();
+            $.ajax({
+                url: '/myweb/' + id,
+                type: 'DELETE',
+                success: function (response) {
+                    console.log("删除联系人成功");
+                    closestRow.remove();
+                },
+                error: function (error) {
+                    console.log("删除联系人失败，信息如下");
+                    console.error('Error deleting user:', error);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
