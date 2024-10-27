@@ -1,4 +1,3 @@
-markdown
 # Frontend Project Overview
 
 ## Project Overview
@@ -19,7 +18,7 @@ This project is a front-end application built using Bootstrap and jQuery. The pr
     └─templates                 # Directory for HTML templates/pages
 requirement.txt                 # File listing project dependencies
 ```
-```
+
 
 ## Installation
 
@@ -32,7 +31,7 @@ To get started with this project, follow these steps:
    ```
 
 2. **Install dependencies:**
-   - Use pip to install the dependencies listed in `requirement.txt`:
+    Use pip to install the dependencies listed in `requirement.txt`:
      ```bash
      pip install -r requirement.txt
      ```
